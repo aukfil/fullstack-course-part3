@@ -24,8 +24,13 @@ let persons = [
 ]
 
 const app = http.createServer((request, response) => {
-  response.writeHead(200, { 'Content-Type': 'application/json' })
-  response.end(JSON.stringify(persons))
+    if (request.url === '/api/persons') {
+        response.writeHead(200, { 'Content-Type': 'application/json' })
+        response.end(JSON.stringify(persons))
+    } else {
+        response.writeHead(404, { 'Content-Type': 'text/plain' })
+        response.end('404 Not Found')
+    }
 })
 
 const PORT = 3001
