@@ -1,4 +1,5 @@
-const http = require('http')
+const express = require('express')
+const app = express()
 
 let persons = [
     { 
@@ -23,16 +24,23 @@ let persons = [
     }
 ]
 
-const app = http.createServer((request, response) => {
-    if (request.url === '/api/persons') {
-        response.writeHead(200, { 'Content-Type': 'application/json' })
-        response.end(JSON.stringify(persons))
-    } else {
-        response.writeHead(404, { 'Content-Type': 'text/plain' })
-        response.end('404 Not Found')
-    }
-})
-
-const PORT = 3001
-app.listen(PORT)
-console.log(`Server running on port ${PORT}`)
+app.get('/api/persons', (request, response) => {
+    response.json(persons)
+  })
+  
+  app.get('/info', (request, response) => {
+    const info = `
+      <p>Phonebook has info for ${persons.length} people</p>
+      <p>${new Date()}</p>
+    `
+    response.send(info)
+  })
+  
+  app.use((request, response) => {
+    response.status(404).send('404 Not Found')
+  })
+  
+  const PORT = 3001
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`)
+  })
