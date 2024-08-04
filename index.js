@@ -1,6 +1,8 @@
 const express = require('express')
 const app = express()
 
+app.use(express.json())
+
 let persons = [
     { 
       "id": "1",
@@ -39,19 +41,27 @@ app.get('/api/persons/:id', (request, response) => {
     }
 })
   
-  app.get('/info', (request, response) => {
+app.get('/info', (request, response) => {
     const info = `
       <p>Phonebook has info for ${persons.length} people</p>
       <p>${new Date()}</p>
     `
     response.send(info)
-  })
+})
+
+app.delete('/api/persons/:id', (request, response) => {
+    const id = request.params.id
+    persons = persons.filter(person => person.id !== id)
+
+    response.status(204).end()
+})
+
+app.use((request, response) => {
+  response.status(404).send('404 Not Found')
+})
   
-  app.use((request, response) => {
-    response.status(404).send('404 Not Found')
-  })
-  
-  const PORT = 3001
-  app.listen(PORT, () => {
+
+const PORT = 3001
+app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
-  })
+})
