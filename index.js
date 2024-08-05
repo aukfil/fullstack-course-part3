@@ -49,6 +49,12 @@ app.get('/info', (request, response) => {
     response.send(info)
 })
 
+app.post('/api/persons', (request,response) => {
+  const person = request.body
+  console.log(person)
+  response.json(person)
+})
+
 app.delete('/api/persons/:id', (request, response) => {
     const id = request.params.id
     persons = persons.filter(person => person.id !== id)
