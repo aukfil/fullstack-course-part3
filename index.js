@@ -51,8 +51,12 @@ app.get('/info', (request, response) => {
 
 app.post('/api/persons', (request,response) => {
   const person = request.body
-  console.log(person)
-  response.json(person)
+  const newId = Math.floor(Math.random() * 1000000).toString()
+  const newPerson = { ...person, id: newId }
+  persons = persons.concat(newPerson)
+
+  console.log(newPerson)
+  response.json(newPerson)
 })
 
 app.delete('/api/persons/:id', (request, response) => {
