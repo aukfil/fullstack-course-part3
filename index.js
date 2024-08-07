@@ -50,8 +50,27 @@ app.get('/info', (request, response) => {
 })
 
 app.post('/api/persons', (request,response) => {
-  const person = request.body
+  const body = request.body
   const newId = Math.floor(Math.random() * 1000000).toString()
+
+  if (!body.name) {
+    return response.status(400).json({
+      error: 'name missing'
+    })
+  }
+
+  if (!body.number) {
+    return response.status(400).json({
+      error: 'number missing'
+    })
+  }
+
+  const person = {
+    name: body.name,
+    number: body.number,
+    id: newId
+  }
+
   const newPerson = { ...person, id: newId }
   persons = persons.concat(newPerson)
 
