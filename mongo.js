@@ -21,20 +21,26 @@ const personSchema = new mongoose.Schema({
 
 const Person = mongoose.model('Person', personSchema)
 
-// const person = new Person({
-//   name: 'Arto Vihavainen',
-//   number: '045-1232456',
-// })
+if (process.argv.length>3) {
 
-// person.save().then(result => {
-//   console.log('person saved!')
-//   mongoose.connection.close()
-// })
-
-Person.find({}).then(result => {
-  console.log('phonebook:')
-  result.forEach(person => {
-    console.log(person.name, person.number)
+  const person = new Person({
+    name: process.argv[3],
+    number: process.argv[4],
   })
-  mongoose.connection.close()
-})
+
+  person.save().then(result => {
+    console.log(`added ${process.argv[3]} number ${process.argv[4]} to phonebook`)
+    mongoose.connection.close()
+  })
+
+} else {
+
+  Person.find({}).then(result => {
+    console.log('phonebook:')
+    result.forEach(person => {
+      console.log(person.name, person.number)
+    })
+    mongoose.connection.close()
+  })
+
+}
