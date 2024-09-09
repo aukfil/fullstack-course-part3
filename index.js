@@ -2,23 +2,12 @@ require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const app = express()
-
-const mongoose = require('mongoose')
-const url = process.env.MONGODB_URI
+const Person = require('./models/person')
 
 app.use(cors())
 app.use(express.json())
 app.use(express.static('dist'))
 
-mongoose.set('strictQuery',false)
-mongoose.connect(url)
-
-const personSchema = new mongoose.Schema({
-  name: String,
-  number: String
-})
-
-const Person = mongoose.model('Person', personSchema)
 
 app.get('/api/persons', (request, response) => {
     Person.find({}).then(notes => {
@@ -91,7 +80,7 @@ app.use((request, response) => {
 })
   
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })
