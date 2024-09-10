@@ -36,7 +36,6 @@ app.get('/info', (request, response) => {
 
 app.post('/api/persons', (request,response) => {
   const body = request.body
-  const newId = Math.floor(Math.random() * 1000000).toString()
 
   if (!body.name) {
     return response.status(400).json({
@@ -50,22 +49,19 @@ app.post('/api/persons', (request,response) => {
     })
   }
 
-  if (persons.find(person => person.name === body.name)) {
-    return response.status(400).json({
-      error: 'name must be unique'
-    })
-  }
-
-  const newPerson = {
+  const person = new Person({
     name: body.name,
-    number: body.number,
-    id: newId
-  }
+    number: body.number
+  })
 
-  persons = persons.concat(newPerson)
-
-  console.log(newPerson)
-  response.json(newPerson)
+  person.save()
+    .then(savedPerson => {
+      response.json(savedPerson)
+    })
+    .catch(error => {
+      console.log(error)
+      response.status(500).json({error: 'Error saving person to database'})
+    })
 })
 
 app.delete('/api/persons/:id', (request, response) => {
