@@ -10,21 +10,22 @@ app.use(express.static('dist'))
 
 
 app.get('/api/persons', (request, response) => {
-    Person.find({}).then(notes => {
-      response.json(notes)
+    Person.find({}).then(persons => {
+      response.json(persons)
     })
   })
 
-app.get('/api/persons/:id', (request, response) => {
-    const id = request.params.id
-    const person = persons.find(person => person.id === id)
-
-    if (person) {
-        response.json(person)
-    } else {
-        response.status(404).end()
-    }
-})
+  app.get('/api/persons/:id', (request, response, next) => {
+    Person.findById(request.params.id)
+      .then(person => {
+        if (person) {
+          response.json(person)
+        } else {
+          response.status(404).end()
+        }
+      })
+      .catch(error => next(error))
+  })
   
 app.get('/info', (request, response) => {
     const info = `
@@ -64,11 +65,12 @@ app.post('/api/persons', (request,response) => {
     })
 })
 
-app.delete('/api/persons/:id', (request, response) => {
-    const id = request.params.id
-    persons = persons.filter(person => person.id !== id)
-
-    response.status(204).end()
+app.delete('/api/persons/:id', (request, response, next) => {
+  Person.findByIdAndDelete(request.params.id)
+    .then(result => {
+      response.status(204).end()
+    })
+    .catch(error => next(error))
 })
 
 app.use((request, response) => {
