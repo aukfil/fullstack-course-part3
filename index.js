@@ -15,24 +15,28 @@ app.get('/api/persons', (request, response) => {
     })
   })
 
-  app.get('/api/persons/:id', (request, response, next) => {
-    Person.findById(request.params.id)
-      .then(person => {
-        if (person) {
-          response.json(person)
-        } else {
-          response.status(404).end()
-        }
-      })
-      .catch(error => next(error))
-  })
-  
+app.get('/api/persons/:id', (request, response, next) => {
+  Person.findById(request.params.id)
+    .then(person => {
+      if (person) {
+        response.json(person)
+      } else {
+        response.status(404).end()
+      }
+    })
+    .catch(error => next(error))
+})
+
 app.get('/info', (request, response) => {
+  Person.find({})
+  .then(persons => {
     const info = `
       <p>Phonebook has info for ${persons.length} people</p>
       <p>${new Date()}</p>
     `
     response.send(info)
+  })
+  .catch(error => next(error))
 })
 
 app.post('/api/persons', (request,response) => {
