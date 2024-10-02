@@ -10,10 +10,10 @@ app.use(express.json())
 
 
 app.get('/api/persons', (request, response) => {
-    Person.find({}).then(persons => {
-      response.json(persons)
-    })
+  Person.find({}).then(persons => {
+    response.json(persons)
   })
+})
 
 app.get('/api/persons/:id', (request, response, next) => {
   Person.findById(request.params.id)
@@ -29,14 +29,14 @@ app.get('/api/persons/:id', (request, response, next) => {
 
 app.get('/info', (request, response) => {
   Person.find({})
-  .then(persons => {
-    const info = `
+.then(persons => {
+  const info = `
       <p>Phonebook has info for ${persons.length} people</p>
       <p>${new Date()}</p>
     `
-    response.send(info)
-  })
-  .catch(error => next(error))
+  response.send(info)
+})
+.catch(error => next(error))
 })
 
 app.post('/api/persons', (request,response, next) => {
