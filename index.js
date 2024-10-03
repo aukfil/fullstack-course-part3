@@ -27,16 +27,16 @@ app.get('/api/persons/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
-app.get('/info', (request, response) => {
+app.get('/info', (request, response, next) => {
   Person.find({})
-.then(persons => {
-  const info = `
+    .then(persons => {
+      const info = `
       <p>Phonebook has info for ${persons.length} people</p>
       <p>${new Date()}</p>
     `
-  response.send(info)
-})
-.catch(error => next(error))
+      response.send(info)
+    })
+    .catch(error => next(error))
 })
 
 app.post('/api/persons', (request,response, next) => {
@@ -112,9 +112,8 @@ const errorHandler = (error, request, response, next) => {
 }
 
 app.use(errorHandler)
-  
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`)
+  console.log(`Server running on port ${PORT}`)
 })
